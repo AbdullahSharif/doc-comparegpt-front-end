@@ -109,7 +109,7 @@ const Chatbot = () => {
     <div className="main-container">
       <div className="chat-container">
         <div className="chat-header">
-          <h2 className="chat-title">DocCompareGPT</h2>
+          <h2 className="chat-title">Reg-Compliance AI</h2>
         </div>
         <div className="chat-messages">
           {messages.map((message, index) => (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -7,7 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import url from "../../utils/api";
 import "./Signup.css";
-
+import userAuthStore from "../../stores/userauth/userauth";
 // Validation schema using Yup
 const SignupSchema = Yup.object({
   name: Yup.string().required("Name is Required"),
@@ -22,6 +22,9 @@ const SignupSchema = Yup.object({
 
 const Signup = () => {
   const navigate = useNavigate();
+  const updateUser = userAuthStore((state) => state.setUser);
+
+  const [loading, setLoading] = useState(false); // Track the loading state
 
   const signUpMutuation = useMutation({
     mutationFn: (values) => {
@@ -41,17 +44,42 @@ const Signup = () => {
       toast.error(error.response.data.detail);
     },
     onSuccess: (data) => {
-      if (data.data.error) {
-        toast.error(data.data.error, {});
+      // if (data.data.error) {
+      //   toast.error(data.data.error, {});
 
+      //   return;
+      // }
+
+      // toast.success("User created succssfully");
+      // localStorage.setItem("access", data.data.access_token);
+      // localStorage.setItem("user", data.data.user_type);
+      // if (data.data.user_type === "user") {
+      //   navigate("/user/dashboard");
+      // } else {
+      //   navigate("/admin/documents");
+      // }
+      setLoading(false); // Stop the loader on success
+      if (data.data.error) {
+        toast.error(data.data.error);
         return;
       }
-      toast.success("User created succssfully");
+      navigate("/admin/documents");
+      toast.success(data.data.message);
+      console.log(data.data);
+      localStorage.setItem("access", data.data.access_token);
+      localStorage.setItem("user", data.data.user_type);
+      updateUser(data.data.user_type);
+      if (data.data.user_type === "admin") {
+        navigate("/admin/documents");
+      } else if (data.data.user_type === "user") {
+        navigate("/user/dashboard");
+      }
     },
   });
 
   // Handle form submission
   const handleSignup = (values) => {
+    setLoading(true); // Start the loader when login starts
     signUpMutuation.mutate(values);
   };
 
@@ -114,8 +142,36 @@ const Signup = () => {
                   className="error"
                 />
               </div>
-              <button type="submit" className="button">
-                Sign Up
+              {/* The login button with a spinner inside it */}
+              <button
+                type="submit"
+                className="button flex items-center justify-center"
+                disabled={loading} // Disable button when loading
+              >
+                {loading ? (
+                  <svg
+                    className="animate-spin h-5 w-5 text-white mr-3"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8z"
+                    ></path>
+                  </svg>
+                ) : (
+                  "Sign Up"
+                )}
               </button>
             </Form>
           )}

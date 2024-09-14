@@ -113,7 +113,7 @@ const UserDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold">Welcome to DocCompareGPT</h1>
+        <h1 className="text-3xl font-bold">Welcome to Reg-Compliance AI</h1>
         <h2 className="text-2xl text-gray-700 mt-4">
           Please choose an option below to continue.
         </h2>
@@ -123,7 +123,7 @@ const UserDashboard = () => {
         {/* Upload Standard & Personal Documents Section */}
         <div className="bg-white p-6 rounded-2xl shadow-md hover:bg-blue-100 transition-colors flex flex-col justify-between">
           <h2 className="text-lg font-bold mb-4 text-center text-gray-700">
-            Upload a Standard and Personal Document to check alignment
+            Reg-Compliance AI
           </h2>
 
           <Formik

@@ -21,11 +21,17 @@ const GenerateReport = () => {
 
     try {
       const protocol = window.location.protocol;
-      const response = await axios.post(`${protocol}//${url}/admin/compare-document`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+
+      const response = await axios.post(
+        `${protocol}//${url}/user/compare-document`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("access")}`, // Add the token here
+          },
+        }
+      );
 
       const markdownReport = response.data.Report.content;
       const htmlContent = marked(markdownReport);
@@ -44,7 +50,7 @@ const GenerateReport = () => {
     <div className="main-container">
       <div className="report-container">
         <div className="report-header">
-          <h2 className="report-title">Document Comparison Report</h2>
+          <h2 className="report-title">Document Compliance Report</h2>
         </div>
         <div className="report-content">
           {loading ? (
@@ -55,7 +61,10 @@ const GenerateReport = () => {
           ) : (
             <div className="report-result">
               {result ? (
-                <div className="markdown-content" dangerouslySetInnerHTML={{ __html: result }} />
+                <div
+                  className="markdown-content"
+                  dangerouslySetInnerHTML={{ __html: result }}
+                />
               ) : (
                 <p>No report generated yet.</p>
               )}
@@ -63,8 +72,8 @@ const GenerateReport = () => {
           )}
         </div>
         <div className="report-actions">
-          <button 
-            onClick={handleGenerateReport} 
+          <button
+            onClick={handleGenerateReport}
             className="generate-report-button"
             disabled={loading} // Disable button while loading
           >

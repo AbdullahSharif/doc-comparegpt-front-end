@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Formik, Form, Field, ErrorMessage, resetForm } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
@@ -8,13 +8,14 @@ import url from "../../utils/api";
 
 export default function AddDocument() {
   const [isLoading, setIsLoading] = useState(false);
+  const [eta, setEta] = useState(180); // 3 minutes countdown
+  const queryClient = useQueryClient();
 
   const initialValues = {
     name: "",
     description: "",
     document: null,
   };
-  const queryClient = useQueryClient();
 
   const validationSchema = Yup.object({
     name: Yup.string().required("Document name is required"),
@@ -48,22 +49,36 @@ export default function AddDocument() {
     },
     onMutate: () => {
       setIsLoading(true);
+      setEta(180); // Reset ETA on new upload
     },
     onSuccess: () => {
       toast.success("Document uploaded successfully");
       queryClient.invalidateQueries(["documents"]);
-
-      setIsLoading(false);
     },
-    onError: (error) => {
-      console.log(error);
+    onError: () => {
       toast.error("Error uploading your document");
-      setIsLoading(false);
     },
     onSettled: () => {
       setIsLoading(false);
     },
   });
+
+  useEffect(() => {
+    let interval;
+    if (isLoading && eta > 0) {
+      interval = setInterval(() => {
+        setEta((prevEta) => prevEta - 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, [isLoading, eta]);
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -78,7 +93,7 @@ export default function AddDocument() {
             resetForm();
           }}
         >
-          {({ setFieldValue, isSubmitting, handleSubmit }) => (
+          {({ setFieldValue, handleSubmit }) => (
             <Form>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -139,7 +154,7 @@ export default function AddDocument() {
                   onClick={handleSubmit}
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 >
-                  {"Upload Document"}
+                  {isLoading ? "Uploading..." : "Upload Document"}
                 </button>
               </div>
             </Form>
@@ -147,9 +162,14 @@ export default function AddDocument() {
         </Formik>
 
         {isLoading && (
-          <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-            <div className="text-white">Uploading your document....</div>
-            <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-blue-500"></div>
+          <div className="fixed inset-0 flex flex-col items-center justify-center bg-gray-800 bg-opacity-50">
+            <div className="text-white mb-2">Uploading your document...</div>
+            <div className="flex items-center">
+              <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-t-transparent border-blue-500"></div>
+              <div className="text-white ml-4">{`Time: ${formatTime(
+                eta
+              )}`}</div>
+            </div>
           </div>
         )}
       </div>
