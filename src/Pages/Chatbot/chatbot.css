@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Apply the Inter font globally */
+body {
+  @apply bg-gray-300 text-black; /* Background gray, text black */
+  font-family: "Inter";
+  overflow-y: hidden; /* Prevent vertical scrolling on the body */
+}
+
+/* Main container for chat */
+.main-container {
+  @apply flex h-screen justify-center items-center; /* Center content horizontally and vertically */
+}
+
+/* Chat container styling */
+.chat-container {
+  @apply flex flex-col bg-white text-black border border-gray-300 rounded-lg shadow-lg; /* Centered box with shadow */
+  width: 100%;
+  max-width: 900px; /* Increase the maximum width */
+  height: 90%; /* Increase the height */
+}
+
+/* Chat header styling */
+.chat-header {
+  @apply flex items-center justify-between border-b border-gray-300 bg-white p-4; /* Header with padding and border */
+}
+
+.chat-title {
+  @apply text-xl sm:text-2xl md:text-3xl font-extrabold text-center;
+}
+
+/* Chat messages styling */
+.chat-messages {
+  @apply flex-1 overflow-auto bg-white text-black p-4 space-y-4; /* Area for messages */
+  font-family: "Inter";
+  max-height: 75vh; /* Set a maximum height for the messages container */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.chat-message {
+  @apply max-w-full sm:max-w-2xl px-4 py-2 rounded-lg;
+}
+
+/* Sent message styling (user query) */
+.sent {
+  @apply bg-blue-600 text-white self-end rounded-lg text-base sm:text-lg p-2;
+  margin-left: auto; /* Push the user's message to the right */
+}
+
+/* AI response styling */
+.ai-response {
+  @apply bg-gray-200 text-black self-start text-base sm:text-lg p-2;
+  font-family: "Inter";
+  margin-right: auto; /* Push the AI's response to the left */
+}
+
+/* Chat input container styling */
+.chat-input-container {
+  @apply flex items-center p-4 border-t border-gray-300 bg-white; /* Input area with border and padding */
+  max-height: 7rem; /* Set a maximum height for the input container */
+  overflow: hidden; /* Prevent overflow */
+}
+
+.chat-input {
+  @apply flex-1 bg-gray-200 text-black border border-gray-400 rounded-l-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-base sm:text-lg;
+  max-height: 5rem; /* Set a maximum height for the input field */
+  overflow-y: auto; /* Enable vertical scrolling if content overflows */
+}
+
+.chat-send-button {
+  @apply bg-blue-600 text-white ml-2 px-4 py-2 rounded-r-full hover:bg-blue-700;
+  height: 100%; /* Match the container height */
+  min-height: 3rem; /* Ensure minimum height */
+  flex-shrink: 0; /* Prevent shrinking */
+  display: flex; /* Use flex to center text vertically */
+  align-items: center; /* Center text vertically */
+  justify-content: center; /* Center text horizontally */
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.typing-indicator {
+  display: flex;
+  justify-content: space-around;
+  width: 50px;
+}
+
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  background-color: #ccc;
+  border-radius: 50%;
+  display: inline-block;
+  animation: typing 1s infinite alternate;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  from {
+    opacity: 0.3;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(3px);
+  }
+}

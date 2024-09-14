@@ -1,0 +1,48 @@
+/* src/Pages/Signup/Signup.css */
+
+.signup-container {
+  @apply flex flex-col justify-center items-center min-h-screen bg-white;
+}
+
+
+.name-of-site {
+  @apply text-center mb-16; /* Space between the site name and the form */
+}
+
+.name-of-site h1 {
+  @apply text-4xl font-bold text-gray-800; /* Adjust size and color */
+}
+
+.form-container {
+  @apply bg-white p-8 rounded-lg shadow-lg max-w-md w-full;
+}
+
+.title {
+  @apply text-3xl font-bold text-gray-800 mb-6 text-center;
+}
+
+.input {
+  @apply w-full p-4 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500;
+  font-size: 1.25rem; /* Larger font size */
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input:focus {
+  @apply border-blue-500 ring-2 ring-blue-300;
+}
+
+.button {
+  @apply w-full py-3 bg-blue-600 text-white font-semibold rounded-lg cursor-pointer transition-transform transform hover:scale-105 hover:bg-blue-700;
+}
+
+.error {
+  @apply text-red-500 text-center mb-4;
+}
+
+.redirect {
+  @apply text-center mt-4;
+}
+
+.link {
+  @apply text-blue-600 hover:underline;
+}
