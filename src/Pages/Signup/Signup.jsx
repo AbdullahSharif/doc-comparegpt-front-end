@@ -86,7 +86,7 @@ const Signup = () => {
   return (
     <div className="signup-container">
       <div className="name-of-site">
-        <h1>DocCompareGPT</h1>
+        <h1>RegCompliance - AI</h1>
       </div>
       <div className="form-container">
         <h2 className="title">Create Your Account</h2>
